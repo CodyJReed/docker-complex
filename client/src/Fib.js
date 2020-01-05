@@ -9,13 +9,17 @@ export default () => {
   useEffect(() => {
     fetchValues();
     fetchIndexes();
-  });
+  }, []);
 
-  const fetchValues = async () =>
-    setValues(await axios.get("/api/values/current"));
+  const fetchValues = async () => {
+    let res = await axios.get("/api/values/current");
+    setValues(res.data);
+  };
 
-  const fetchIndexes = async () =>
-    setSeenIndexes(await axios.get("/api/values/all"));
+  const fetchIndexes = async () => {
+    let res = await axios.get("/api/values/all");
+    setSeenIndexes(res.data);
+  };
 
   const renderSeenIndexes = () =>
     seenIndexes.map(({ number }) => number).join(", ");
@@ -27,18 +31,20 @@ export default () => {
       </div>
     ));
 
-  const handleSubmit = async event => {
-    event.preventDefault();
-
-    await axios.post("/api/values", {
-      index
-    });
-    setIndex("");
-  };
-
   return (
     <Fragment>
-      <form onSubmit={handleSubmit()}>
+      <form
+        onSubmit={async e => {
+          e.preventDefault();
+
+          await axios.post("/api/values", {
+            index
+          });
+          setIndex("");
+          fetchIndexes();
+          fetchValues();
+        }}
+      >
         <label>Enter your index</label>
         <input value={index} onChange={event => setIndex(event.target.value)} />
         <button>Submit</button>
