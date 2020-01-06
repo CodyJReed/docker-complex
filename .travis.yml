@@ -20,3 +20,17 @@ after_success:
   - docker push ickyblindman/complex-server
   - docker push ickyblindman/complex-nginx
   - docker push ickyblindman/complex-worker
+
+  deploy:
+    edge: true
+    provider: elasticbeanstalk
+    region: us-east-1
+    app: docker-react
+    env: DockerReact-env
+    bucket_name: elasticbeanstalk-us-east-1-022924706999
+    bucket_path: docker-complex
+    on:
+      branch: master
+      access_key_id: $AWS_ACCESS_KEY
+      secret_access_key: $AWS_SECRET_KEY
+    
