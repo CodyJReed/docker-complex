@@ -14,7 +14,7 @@ after_success:
   - docker build -t ickyblindman/complex-nginx ./nginx
   - docker build -t ickyblindman/complex-worker ./worker
 
-  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
   - docker push ickyblindman/complex-client
   - docker push ickyblindman/complex-server
